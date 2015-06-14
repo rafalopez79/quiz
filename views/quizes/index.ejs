@@ -1,5 +1,16 @@
+<h3> Buscar pregunta </h3>
+<p>
+<form method="get" action="/quizes">           
+    <p> Buscar pregunta
+    <input type="text" name="search" />
+    <input type="submit" />
+</form>    
+</p>
+<h3> Preguntas </h3>   
+<p>
 <table>
     <%var i; for (i=0; i < quizes.length; i++) { %>
         <tr><td><a href="quizes/<%= quizes[i].id %>"><%= quizes[i].pregunta %></a></td></tr>
     <% } %>    
 </table>
+</p>
