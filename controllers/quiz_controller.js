@@ -28,11 +28,11 @@ exports.index = function(req, res){
     if (search){
        search = '%'+search+'%';
        search = search.replace(' ','%');
-       models.Quiz.findAll({where: ["pregunta like ?", search]}).then(function(quizes){
+       models.Quiz.findAll({where: ["pregunta like ?", search], order: 'pregunta'}).then(function(quizes){
            res.render('quizes/index', { quizes: quizes});
         }).catch(function(error){ next(error);});
     }else{
-        models.Quiz.findAll().then(function(quizes){
+        models.Quiz.findAll({order: 'pregunta'}).then(function(quizes){
            res.render('quizes/index', { quizes: quizes});
         }).catch(function(error){ next(error);});
     }
