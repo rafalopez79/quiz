@@ -28,6 +28,23 @@ app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 
+//autologout
+app.use(function(req, res, next) {
+    if (req.session.user && req.session.user.time){
+        console.log('autologout checking...');
+        var ctime = req.session.user.time;
+        var now = new Date();
+        if (now.getTime() - ctime >= 120000){
+            console.log('autologout...');
+            delete req.session.user;
+            res.redirect('/login'); 
+            return;
+        }else{
+            req.session.user.time = now.getTime();    
+        }
+    }
+    next();
+});
 
 //session
 app.use(function(req, res, next) {
@@ -39,7 +56,6 @@ app.use(function(req, res, next) {
 });
 
 app.use('/', routes);
-
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
     var err = new Error('Not Found');
@@ -72,6 +88,5 @@ app.use(function(err, req, res, next) {
         errors:[]
     });
 });
-
 
 module.exports = app;
