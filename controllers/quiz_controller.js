@@ -62,7 +62,7 @@ exports.edit = function(req, res){
 };
 
 
-exports.update = function(req, res) {        
+exports.update = function(req, res) {          
   req.quiz.pregunta  = req.body.quiz.pregunta;
   req.quiz.respuesta = req.body.quiz.respuesta;
   req.quiz.tematica = req.body.quiz.tematica;
@@ -74,7 +74,7 @@ exports.update = function(req, res) {
         res.render('quizes/edit', {quiz: req.quiz, errors: err.errors});
       } else {
         req.quiz
-        .save( {fields: ["pregunta", "respuesta","tematica"]})
+        .save( {fields: ["pregunta", "respuesta", "tematica"]})
         .then( function(){ res.redirect('/quizes');});  
      }
     }
