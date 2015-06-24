@@ -36,7 +36,7 @@ Comment.belongsTo(Quiz);
 Quiz.hasMany(Comment);
 
 Quiz.avgCommentCount = function(callback, cerror){    
-    sequelize.query("SELECT AVG(c) as c FROM (SELECT a.id, COUNT(DISTINCT b.id) c FROM \"Quizzes\" a LEFT JOIN \"Comments\" b ON a.id = b.\"QuizId\"  GROUP BY a.id ) a")
+    sequelize.query("SELECT ROUND(AVG(c),2) as c FROM (SELECT a.id, COUNT(DISTINCT b.id) c FROM \"Quizzes\" a LEFT JOIN \"Comments\" b ON a.id = b.\"QuizId\"  GROUP BY a.id ) a")
     .then(function(c){ callback(c);})
     .catch(function(error){cerror(error)});
 };
