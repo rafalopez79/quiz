@@ -12,8 +12,30 @@ exports.stats = function(req, res, next) {
             stats.questionNumber = count;
             Comment.count().then(
                 function(ccount){
-                    stats.commentNumber = ccount;                                        
-                    res.render('stats/stats', {stats: stats, errors: errors});
+                    stats.commentNumber = ccount;                         
+                    Quiz.avgCommentCount(
+                        function(c){
+                            stats.avgComment = c[0].c;
+                            Quiz.noCommentCount(
+                                function(c){
+                                    stats.questionWithoutComments = c[0].c;
+                                    Quiz.commentCount(
+                                        function(c){
+                                            stats.questionWithComments = c[0].c;
+                                            res.render('stats/stats', {stats: stats, errors: errors});
+                                        },function(err){
+                                            next(err);
+                                        }                                        
+                                    );
+                                },
+                                function(err){
+                                    next(err);
+                                }                               
+                            );                           
+                        }, function(err){
+                            next(err);
+                        }
+                    );                    
                 }
             ).catch(function(error){next(error)});
         }

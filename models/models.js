@@ -35,6 +35,25 @@ var Comment = sequelize.import(comment_path);
 Comment.belongsTo(Quiz);
 Quiz.hasMany(Comment);
 
+Quiz.avgCommentCount = function(callback, cerror){    
+    sequelize.query("SELECT AVG(c) as c FROM (SELECT QuizId, COUNT(DISTINCT b.id) c FROM Quizzes a LEFT JOIN Comments b ON a.id = b.QuizId  GROUP BY a.id ) a")
+    .then(function(c){ callback(c);})
+    .catch(function(error){cerror(error)});
+};
+
+Quiz.noCommentCount = function(callback, cerror){    
+    sequelize.query("SELECT COUNT(*) as c FROM Quizzes a WHERE NOT EXISTS (SELECT 1 FROM Comments b WHERE a.id = b.QuizId) ")
+    .then(function(c){ callback(c);})
+    .catch(function(error){cerror(error)});
+};
+
+Quiz.commentCount = function(callback, cerror){    
+    sequelize.query("SELECT COUNT(*) as c FROM Quizzes a WHERE EXISTS (SELECT 1 FROM Comments b WHERE a.id = b.QuizId) ")
+    .then(function(c){ callback(c);})
+    .catch(function(error){cerror(error)});
+};
+
+
 exports.Quiz = Quiz;
 exports.Comment = Comment;
 
